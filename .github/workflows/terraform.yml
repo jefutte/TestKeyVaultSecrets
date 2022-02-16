@@ -1,0 +1,40 @@
+name: 'Terraform'
+
+on: [push, pull_request, workflow_dispatch]
+
+env:
+  TF_LOG: INFO
+  keyvaultname: ""
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    # Set the working directory to main for the config files
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./terraform
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: ConnectAzure
+      uses: Azure/login@v1
+      with:
+        creds: ${{ secrets.KeyVault_Credentials }}
+
+    - name: GetDeploymentSecret
+      uses: Azure/get-keyvault-secret
+      with: 
+        keyvvault: env.keyvaultname
+        secrets: testkey
+      id: DeploymentSecret
+
+    - name: Output
+      run: | 
+        echo "Key is ${{ steps.DeploymentSecret.outputs.testkey"

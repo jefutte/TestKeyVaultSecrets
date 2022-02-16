@@ -1,0 +1,128 @@
+name: 'Workflow1'
+
+#on: [push, pull_request, workflow_dispatch]
+
+on: 
+  workflow_dispatch:
+    inputs:
+      PolicyGroupNumbertoChoose:
+        description: 'Azure Firewall Policy Group number to choose'     
+        required: true
+        default: '500' 
+        type: choice
+        options:
+        - '505'
+        - '506'
+        - '507'
+      tags:
+        description: 'Test scenario tags'
+        required: false 
+        type: boolean
+      PolicyGroupNumber:
+        description: 'Azure Firewall Policy Group number'
+        type: string
+        required: true 
+
+env:
+  TF_LOG: INFO
+  environment_definition: dev
+  fw_port: 500
+
+jobs:
+  olsen2:
+    name: 'Job1'
+    runs-on: ubuntu-latest
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    # Set the working directory to main for the config files
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./terraform
+
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # # Udfør nogle Azure CLI kommandoer
+    # - name: Azure CLI script
+    #   uses: azure/CLI@v1
+    #   with:
+    #     azcliversion: latest # 2.30.0 ændret til latest da den brokkede sig over versionen var gammel
+    #     inlineScript: |
+    #       az account show -o table
+    #       az storage -h
+    
+    - name: Test inputs
+      run: |
+         echo "Log level: $PolicyGroupNumbertoChoose"
+         echo "Tags: $TAGS"
+         echo "Environment: $PolicyGroupNumber"
+      env:
+         LEVEL: ${{ github.event.inputs.PolicyGroupNumbertoChoose }}
+         TAGS: ${{ github.event.inputs.tags }}
+         ENVIRONMENT: ${{ github.event.inputs.PolicyGroupNumber }}
+    
+    - name: Display env
+      run: |
+        echo "hej"
+        echo "environ_definition is ${{ env.environment_definition }}"
+        echo "firewall port is ${{ env.fw_port }}"
+
+    - name: Run ls
+      id: ls
+      run: ls -l
+
+    - name: Run ls gh workspace
+      id: lsws
+      run: ls -lR $GITHUB_WORKSPACE/
+
+    # - name: Run chmod
+    #   id: chmod
+    #   run: chmod u+x ip_rule.sh
+
+    # - name: Run allow ip_rule.sh
+    #   id: ip_rule_allow
+    #   run: ./ip_rule.sh allow sandbox
+
+    # - name: Run deny ip_rule.sh
+    #   id: ip_rule_deny
+    #   run: ./ip_rule.sh deny sandbox
+  Carsten:
+    name: 'Job2'
+    runs-on: ubuntu-latest
+
+    # # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    # # Set the working directory to main for the config files
+    defaults:
+      run:
+        shell: bash
+    #     working-directory: ./terraform            # i dette job er ikke noget .terraform
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Run ls
+      id: ls
+      run: pwd;ls -laR .
+
+    - name: test dir
+      id: ls2
+      run: pwd;cd $GITHUB_WORKSPACE/;ls -laR .;pwd
+
+    - name: multi line
+      id: mtest
+      run: |
+        pwd
+        ls -alR
+        cd $GITHUB_WORKSPACE
+        pwd
+        ls -alR
