@@ -37,4 +37,4 @@ jobs:
 
     - name: Output
       run: | 
-        echo "Key is ${{ steps.DeploymentSecret.outputs.testkey"
+        echo "Key is ${{ steps.DeploymentSecret.outputs.testkey }}"
