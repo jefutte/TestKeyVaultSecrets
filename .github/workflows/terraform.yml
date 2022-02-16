@@ -4,7 +4,7 @@ on: [push, pull_request, workflow_dispatch]
 
 env:
   TF_LOG: INFO
-  keyvaultname: ""
+  keyvaultname: "ghvaulttest"
 
 jobs:
   terraform:
