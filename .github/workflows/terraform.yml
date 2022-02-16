@@ -27,7 +27,7 @@ jobs:
     - name: GetDeploymentSecret
       uses: Azure/get-keyvault-secrets@v1
       with: 
-        keyvault: env.keyvaultname
+        keyvault: ${{ env.keyvaultname }}
         secrets: testkey
       id: DeploymentSecret
 
