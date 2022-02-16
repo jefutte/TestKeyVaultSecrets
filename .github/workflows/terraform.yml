@@ -45,8 +45,8 @@ jobs:
       with: 
         keyvault: ${{ env.keyvaultname }}
         secrets: testkey2
-      id: DeploymentSecret
+      id: DeploymentSecret2
 
     - name: Output
       run: | 
-        echo "Key2 is ${{ steps.DeploymentSecret.outputs.testkey2 }}"
+        echo "Key2 is ${{ steps.DeploymentSecret2.outputs.testkey2 }}"
