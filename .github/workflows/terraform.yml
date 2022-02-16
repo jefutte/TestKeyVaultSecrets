@@ -28,10 +28,25 @@ jobs:
       uses: Azure/get-keyvault-secrets@v1
       with: 
         keyvault: ${{ env.keyvaultname }}
-        secrets: testkey, testkey2
+        secrets: testkey
       id: DeploymentSecret
 
     - name: Output
       run: | 
         echo "Key1 is ${{ steps.DeploymentSecret.outputs.testkey }}"
+        
+    - name: ConnectAzureWithDeploymentCreds
+      uses: Azure/login@v1
+      with:
+        creds: ${{ steps.DeploymentSecret.outputs.testkey }}
+
+    - name: GetDeploymentSecret
+      uses: Azure/get-keyvault-secrets@v1
+      with: 
+        keyvault: ${{ env.keyvaultname }}
+        secrets: testkey2
+      id: DeploymentSecret
+
+    - name: Output
+      run: | 
         echo "Key2 is ${{ steps.DeploymentSecret.outputs.testkey2 }}"
