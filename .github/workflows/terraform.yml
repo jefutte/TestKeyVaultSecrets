@@ -29,7 +29,7 @@ jobs:
         creds: ${{ secrets.KeyVault-Credentials }}
 
     - name: GetDeploymentSecret
-      uses: Azure/get-keyvault-secret
+      uses: Azure/get-keyvault-secret@v1
       with: 
         keyvvault: env.keyvaultname
         secrets: testkey
