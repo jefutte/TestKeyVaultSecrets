@@ -22,7 +22,7 @@ jobs:
     - name: ConnectAzure
       uses: Azure/login@v1
       with:
-        creds: ${{ secrets.KeyVault-Credentials }}
+        creds: ${{ secrets.KEYVAULT_CREDENTIALS }}
 
     - name: GetDeploymentSecret
       uses: Azure/get-keyvault-secrets@v1
