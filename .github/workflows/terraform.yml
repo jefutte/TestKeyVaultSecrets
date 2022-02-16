@@ -28,7 +28,7 @@ jobs:
       uses: Azure/get-keyvault-secrets@v1
       with: 
         keyvvault: env.keyvaultname
-        secrets: KeyVaylt-Credentials
+        secrets: testkey
       id: DeploymentSecret
 
     - name: Output
