@@ -34,6 +34,12 @@ jobs:
     - name: Output
       run: | 
         echo "Key1 is ${{ steps.DeploymentSecret.outputs.testkey }}"
+
+    - name: use output
+      run: |
+        echo $json_var | jq '.tenantId'
+      env:
+        json_var: ${{ steps.DeploymentSecret.outputs.testkey }}
         
     - name: ConnectAzureWithDeploymentCreds
       uses: Azure/login@v1
